@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .bor{
+            border: 2px solid red;
+            width: 400px;
+            height: 200px;
+            text-align: center;
+        }
+        #main {
+            margin-top: 50px;
+            border: 1px solid black;
+            cursor: pointer;
+            padding: 30px;
+        }
+
+        #qrcode img {
+            position: absolute;
+            top: 50%;
+            left: 40%;
+            width: 300px;
+            height: 300px;
+            display: block;
+        }
+        #qrcode {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.6);
+            z-index: 9999;
+            display: none;
+        }
+    </style>
+</head>
+<!--<script src="../../js/common/jquery-3.4.1.min.js"></script>-->
+<script src="/js/common/jquery-3.4.1.min.js"></script>
+<script>
+    function founction() {
+      var a = $("#name").val();
+        alert(a)
+        $("#name").val("buxiaole")
+        top.parent.$("#textid").val("123333");
+        parent.parent.document.getElementById("textid").value = "wwwww";
+        // top.parent.shutdownall();
+        parent.parent.shutdownall();
+        top.top.clickyh();
+
+    }
+
+    // $(function() {
+    //     $(".main").click(function() {
+    //         $(".qrcode").fadeIn("slow");
+    //     });
+    //     $(".qrcode").click(function() {
+    //         $(".qrcode").fadeOut("slow");
+    //     })
+    // });
+    //
+    // //该段代码适合本页面只有一个按钮点击
+    // $(function() {
+    //     $("#main").click(function() {
+    //         $("#qrcode").fadeIn("slow");
+    //     });
+    //     $("#qrcode").click(function() {
+    //         $("#qrcode").fadeOut("slow");
+    //     })
+    // });
+
+    // $("#fileup").click(function () {
+    //     alert(123)
+    // })
+
+    function dianji() {
+        $("#qrcode").fadeIn("slow");
+    }
+
+
+    function filechange() {
+        debugger;
+        var formdata = new FormData();
+        var file = document.getElementById('fileup');
+        var fileObj = file.files[0];
+        if(file && fileObj) {
+            formdata.append("file",fileObj);
+        }
+        $.ajax({
+            url:"/test/upload",
+            type:"post",
+            data:formdata,
+            contentType: false,
+            processData: false,
+            success:function(rst){
+                if(rst.state){
+                    var url="/"+rst.data;
+                    $('<img class="show-img" src="'+url+'">').appendTo("#imgs")
+                }
+            }
+    });
+
+
+    }
+</script>
+<body>
+<input>
+    静态页面可以写项目了
+    <div>
+     非常可以   <input id="name" value="hahha" />
+     点击变色   <input type="button" onclick="founction()"/>
+    </div>
+     <br/>
+      <br>
+     <div>
+
+      文件上传   <input type="file" name="file"  id="fileup" onchange="filechange()" />
+
+     </div>
+
+    <div class="bor">
+        <button class="main" onclick="dianji()">点击此处 弹出你想要的</button>
+        <div class="qrcode">
+            <img class="image"  width="100%" height="100%" src="https://pic.cr173.com/up/2012-12/20121212661147437688.gif">
+        </div>
+    </div>
+    <div class="bor">
+        <button class="main">点击此处 弹出你想要的</button>
+        <div class="qrcode">
+            <img class="image"  width="100%" height="100%" src="https://pic.cr173.com/up/2012-12/20121212661148405239.gif">
+        </div>
+    </div>
+
+
+</body>
+</html>
