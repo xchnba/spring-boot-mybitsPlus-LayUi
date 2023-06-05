@@ -5,8 +5,8 @@ import com.example.demo.mall.domain.Student;
 import com.example.demo.mall.domain.User;
 import com.example.demo.mall.mapper.StudentMapper;
 import com.example.demo.mall.service.UserService;
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageInfo;
+//import com.github.pagehelper.Page;
+//import com.github.pagehelper.PageInfo;
 import com.sun.javafx.collections.MappingChange;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -45,25 +45,25 @@ public class StudentController {
         return object.toString();
     }
 
-    @RequestMapping("/findUserList")
-    @ResponseBody
-    public PageInfo<User> findUserList(String name){
-//        Student student = studentMapper.getStudentByName("douzi");
-        // 使用动态代理技术虚拟调用方法
-
-         User student = studentMapper.selectUser("批量", 7962);
-//        User selectUser = userMapper.selectUser("批量", 7962);
-        int page = 1;
-        int size = 10;
-        Page<User> st = new Page<>(1,2);
-        Map<String,String> map = new HashMap<>();
-        map.put("kuorong","123");
-//        PageInfo<User> userList = userService.findUserList(page,size);
-//        PageInfo<User> userList = userService.findUserListByAop(page,size);
-        PageInfo<User> userList = userService.findUserListByPageObj(st);
-        return userList;
-
-    }
+//    @RequestMapping("/findUserList")
+//    @ResponseBody
+//    public PageInfo<User> findUserList(String name){
+////        Student student = studentMapper.getStudentByName("douzi");
+//        // 使用动态代理技术虚拟调用方法
+//
+//         User student = studentMapper.selectUser("批量", 7962);
+////        User selectUser = userMapper.selectUser("批量", 7962);
+//        int page = 1;
+//        int size = 10;
+//        Page<User> st = new Page<>(1,2);
+//        Map<String,String> map = new HashMap<>();
+//        map.put("kuorong","123");
+////        PageInfo<User> userList = userService.findUserList(page,size);
+////        PageInfo<User> userList = userService.findUserListByAop(page,size);
+//        PageInfo<User> userList = userService.findUserListByPageObj(st);
+//        return userList;
+//
+//    }
 
 
 

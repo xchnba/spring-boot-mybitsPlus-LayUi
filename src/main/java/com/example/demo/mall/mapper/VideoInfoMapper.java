@@ -1,7 +1,7 @@
 package com.example.demo.mall.mapper;
 
 import com.example.demo.mall.domain.VideoInfo;
-import com.github.pagehelper.Page;
+//import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 

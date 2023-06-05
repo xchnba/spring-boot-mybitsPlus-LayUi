@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.project.dao.SharesEntityMapper">
+  <resultMap id="BaseResultMap" type="com.example.project.entity.SharesEntity">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="gpdate" jdbcType="DATE" property="gpdate" />
+    <result column="gpdm" jdbcType="VARCHAR" property="gpdm" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="spj" jdbcType="DOUBLE" property="spj" />
+    <result column="zgj" jdbcType="DOUBLE" property="zgj" />
+    <result column="zdj" jdbcType="DOUBLE" property="zdj" />
+    <result column="kpj" jdbcType="DOUBLE" property="kpj" />
+    <result column="qspj" jdbcType="DOUBLE" property="qspj" />
+    <result column="pjj" jdbcType="DOUBLE" property="pjj" />
+    <result column="zde" jdbcType="VARCHAR" property="zde" />
+    <result column="zdf" jdbcType="VARCHAR" property="zdf" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from shares
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.example.project.dao.SharesEntityMapper">
+    insert into shares (id, gpdate, gpdm, 
+      name, spj, zgj, zdj, 
+      kpj, qspj, pjj, zde, 
+      zdf)
+    values (#{id,jdbcType=VARCHAR}, #{gpdate,jdbcType=DATE}, #{gpdm,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR}, #{spj,jdbcType=DOUBLE}, #{zgj,jdbcType=DOUBLE}, #{zdj,jdbcType=DOUBLE}, 
+      #{kpj,jdbcType=DOUBLE}, #{qspj,jdbcType=DOUBLE}, #{pjj,jdbcType=DOUBLE}, #{zde,jdbcType=VARCHAR}, 
+      #{zdf,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.example.project.dao.SharesEntityMapper">
+    update shares
+    set gpdate = #{gpdate,jdbcType=DATE},
+      gpdm = #{gpdm,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      spj = #{spj,jdbcType=DOUBLE},
+      zgj = #{zgj,jdbcType=DOUBLE},
+      zdj = #{zdj,jdbcType=DOUBLE},
+      kpj = #{kpj,jdbcType=DOUBLE},
+      qspj = #{qspj,jdbcType=DOUBLE},
+      pjj = #{pjj,jdbcType=DOUBLE},
+      zde = #{zde,jdbcType=VARCHAR},
+      zdf = #{zdf,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select id, gpdate, gpdm, name, spj, zgj, zdj, kpj, qspj, pjj, zde, zdf
+    from shares
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, gpdate, gpdm, name, spj, zgj, zdj, kpj, qspj, pjj, zde, zdf
+    from shares
+  </select>
+
+  <select id="getSharesByDateSearch" resultMap="BaseResultMap">
+    select id, gpdate, gpdm, name, spj, zgj, zdj, kpj, qspj, pjj, zde, zdf
+    from shares
+  </select>
+
+</mapper>

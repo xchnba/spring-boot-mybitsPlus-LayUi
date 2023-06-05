@@ -1,7 +1,7 @@
 package com.example.demo.mall.common.aop;
 
 import com.example.demo.mall.annotion.LogAnnotation;
-import com.github.pagehelper.PageHelper;
+//import com.github.pagehelper.PageHelper;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
@@ -38,7 +38,7 @@ public class CommonLogAspect {
         }
         int page = (int) as[0];
         int size = (int) as[1];
-        PageHelper.startPage(page,size);
+//        PageHelper.startPage(page,size);
         System.out.println("传入的入参是=="+as.toString());
         String msg = logA.desc();
         //拦截的类名
