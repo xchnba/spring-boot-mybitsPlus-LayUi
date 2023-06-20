@@ -19,7 +19,7 @@
     delete from shares
     where id = #{id,jdbcType=VARCHAR}
   </delete>
-  <insert id="insert" parameterType="com.example.project.dao.SharesEntityMapper">
+  <insert id="insert" parameterType="com.example.project.entity.SharesEntity">
     insert into shares (id, gpdate, gpdm, 
       name, spj, zgj, zdj, 
       kpj, qspj, pjj, zde, 
@@ -29,7 +29,7 @@
       #{kpj,jdbcType=DOUBLE}, #{qspj,jdbcType=DOUBLE}, #{pjj,jdbcType=DOUBLE}, #{zde,jdbcType=VARCHAR}, 
       #{zdf,jdbcType=VARCHAR})
   </insert>
-  <update id="updateByPrimaryKey" parameterType="com.example.project.dao.SharesEntityMapper">
+  <update id="updateByPrimaryKey" parameterType="com.example.project.entity.SharesEntity">
     update shares
     set gpdate = #{gpdate,jdbcType=DATE},
       gpdm = #{gpdm,jdbcType=VARCHAR},
