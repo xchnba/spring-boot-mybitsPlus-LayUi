@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.project.dao.TickerEntityMapper">
+  <resultMap id="BaseResultMap" type="com.example.project.entity.TickerEntity">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="date" jdbcType="VARCHAR" property="date" />
+    <result column="kpj" jdbcType="DOUBLE" property="kpj" />
+    <result column="zgj" jdbcType="DOUBLE" property="zgj" />
+    <result column="zdj" jdbcType="DOUBLE" property="zdj" />
+    <result column="spj" jdbcType="DOUBLE" property="spj" />
+    <result column="vol" jdbcType="DOUBLE" property="vol" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from ticker
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.example.project.entity.TickerEntity">
+    insert into ticker (id, date, kpj, 
+      zgj, zdj, spj, vol
+      )
+    values (#{id,jdbcType=VARCHAR}, #{date,jdbcType=VARCHAR}, #{kpj,jdbcType=DOUBLE}, 
+      #{zgj,jdbcType=DOUBLE}, #{zdj,jdbcType=DOUBLE}, #{spj,jdbcType=DOUBLE}, #{vol,jdbcType=DOUBLE}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.example.project.entity.TickerEntity">
+    update ticker
+    set date = #{date,jdbcType=VARCHAR},
+      kpj = #{kpj,jdbcType=DOUBLE},
+      zgj = #{zgj,jdbcType=DOUBLE},
+      zdj = #{zdj,jdbcType=DOUBLE},
+      spj = #{spj,jdbcType=DOUBLE},
+      vol = #{vol,jdbcType=DOUBLE}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select id, date, kpj, zgj, zdj, spj, vol
+    from ticker
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, date, kpj, zgj, zdj, spj, vol
+    from ticker
+  </select>
+
+  <select id="selectByDate" resultMap="BaseResultMap">
+    select id, date, kpj, zgj, zdj, spj, vol
+    from ticker  where date  &gt; #{start,jdbcType=VARCHAR} and date &lt; #{end,jdbcType=VARCHAR}
+  </select>
+
+</mapper>
