@@ -17,9 +17,46 @@ public class Test005 {
 	}
 
 	public static void main(String[] args) {
-		for (int i = 0; i < 20805; i++) {
-			count();
+
+
+		double initialPrice = 100.0;
+		double buyAmount = 100.0;
+		int maxBuyTimes = 10;
+		double discountRate = 0.2;
+		double totalPrice = 0.0;
+		double totalShares = 0.0;
+
+		double currentPrice = initialPrice;
+		double current = 0.0;
+		int buyTimes = 0;
+
+		while (buyTimes < maxBuyTimes) {
+			double currentBuyAmount = buyAmount / currentPrice;
+			totalShares += currentBuyAmount;
+			totalPrice += buyAmount;
+			current = currentPrice;
+			System.out.println("当前买入价=="+current);
+			currentPrice = currentPrice * (1 - discountRate);
+			System.out.println("当前总份额=="+totalShares);
+			System.out.println("当前总投入=="+totalPrice);
+			System.out.println("下次买入价格=="+currentPrice);
+			double averagePrice1 = totalPrice / totalShares;
+			System.out.println("当前均价=="+averagePrice1);
+			double zy = averagePrice1*1.2;
+			System.out.println("当前止盈价格=="+zy);
+			System.out.println("当前需要上涨=="+zy/current);
+			System.out.println("----------------------------");
+			buyTimes++;
 		}
+
+		double averagePrice = totalPrice / totalShares;
+		System.out.println("全部买入之后的均价为: " + averagePrice);
+		System.out.println("买入的份额为: " + totalShares);
+
+
+//		for (int i = 0; i < 20805; i++) {
+//			count();
+//		}
 	}
 
 }

@@ -1,5 +1,12 @@
 package com.example.demo.jvm;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import java.io.IOException;
+
 //配置堆内存大小
 public class Test001 {
 
@@ -9,10 +16,26 @@ public class Test001 {
 		String c = new String("abc");
 		System.out.println(a==b);
 		System.out.println(b==c);
-
-
-
-
+		String url = "https://www.quword.com/ciku/id_0_0_0_0_0.html"; // 需要爬取的目标网站地址
+		try {
+			Document document = Jsoup.connect(url).get(); // 获取该网页的文档对象
+			String title = document.title(); // 获取页面标题
+			System.out.println("Title: " + title);
+			Elements links = document.select("a[href]"); // 获取该网页中所有的链接元素
+			Elements trs = document.getElementsByTag("p");
+			for (Element link : links) {
+				String linkHref = link.attr("href"); // 获取链接地址
+				String linkText = link.text(); // 获取链接文字
+//				System.out.println("Link href: " + linkHref);
+				System.out.println("Link text: " + linkText);
+			}
+			for (Element link : trs) {
+				String linkText = link.text(); // 获取链接文字
+				System.out.println("Link text: " + linkText);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 
 
