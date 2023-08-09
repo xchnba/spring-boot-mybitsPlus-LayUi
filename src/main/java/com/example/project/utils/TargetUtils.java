@@ -107,6 +107,7 @@ public class TargetUtils {
         List<Double> highList = new ArrayList<>();
         List<Double> lowList = new ArrayList<>();
         List<TickerEntity> list =  tickers.stream().sorted(Comparator.comparing(TickerEntity::getDate)).collect(Collectors.toList());
+//        List<TickerEntity> list =  tickers;
         list.stream().forEach(e->{
             double cl =  e.getSpj().doubleValue();
             closePriceList.add(cl);

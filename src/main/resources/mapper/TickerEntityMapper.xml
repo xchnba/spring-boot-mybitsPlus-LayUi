@@ -44,7 +44,7 @@
 
   <select id="selectByDate" resultMap="BaseResultMap">
     select id, date, kpj, zgj, zdj, spj, vol
-    from ticker  where date  &gt; #{start,jdbcType=VARCHAR} and date &lt; #{end,jdbcType=VARCHAR}
+    from ticker  where date  &gt; #{start,jdbcType=VARCHAR} and date &lt; #{end,jdbcType=VARCHAR} ORDER BY date	asc
   </select>
 
 </mapper>
