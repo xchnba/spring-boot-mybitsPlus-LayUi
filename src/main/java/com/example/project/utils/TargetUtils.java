@@ -101,6 +101,32 @@ public class TargetUtils {
         return macdList;
     }
 
+    public static List<TickerEntity> zhuanHuanMaxVol(List<TickerEntity> tickers) {
+        List<TickerEntity> entityList = new ArrayList<>();
+        List<Double> highList = new ArrayList<>();
+        List<TickerEntity> list =  tickers.stream().sorted(Comparator.comparing(TickerEntity::getDate)).collect(Collectors.toList());
+        list.stream().forEach(e->{
+            double cl =  e.getVol().doubleValue();
+            highList.add(cl);
+        });
+        int j = 0;
+        for (int i = 0; i < list.size(); i++) {
+            //i>46 = i=47
+            if(i>46){
+              int x = i+1;
+              double maxVol =  getHigh(j,x,highList);
+              j = j+1;
+              TickerEntity ticker = list.get(i);
+              ticker.setMaxVol(maxVol);
+              entityList.add(ticker);
+            }else {
+                TickerEntity ticker = list.get(i);
+                ticker.setMaxVol(0.0);
+                entityList.add(ticker);
+            }
+        }
+        return entityList;
+    }
 
     public static List<KdjTarget> geKdj(List<TickerEntity> tickers){
         List<Double> closePriceList = new ArrayList<>();

@@ -23,6 +23,16 @@ public class TickerEntity implements Serializable {
     private Double spj;
     @TableField("vol")
     private Double vol;
+    //前48小时n内的最大交易量
+    private Double maxVol;
+
+    public Double getMaxVol() {
+        return maxVol;
+    }
+
+    public void setMaxVol(Double maxVol) {
+        this.maxVol = maxVol;
+    }
 
     private static final long serialVersionUID = 1L;
 

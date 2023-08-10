@@ -45,8 +45,8 @@ public class TickerController {
         order.setAmount(0d);
         order.setDirection("wu");
         order.setPrice(0d);
-        List<TickerEntity> tickers = entityMapper.selectByDate("2023-04-15 09:54:56", "2023-05-31 23:54:56");
-
+        List<TickerEntity> tickers = entityMapper.selectByDate("2023-05-15 09:54:56", "2023-06-31 23:54:56");
+        tickers = TargetUtils.zhuanHuanMaxVol(tickers);
         //获取K线,第一条是最新的倒叙排序，limit最大300
 //                List<TickerEntity> tickers = TargetUtils.getTickers(marketDataAPIService,"ETH-USDT-SWAP","1H","300");
 
@@ -123,7 +123,7 @@ public class TickerController {
                     //计算止盈止损的点位
                     Double price = order.getPrice();
                     //止盈止损点
-                    Double zyd = 1.011;
+                    Double zyd = 1.006;
                     Double zsd = 0.989;
                     //杠杆倍数
                     Double bs = 75.0;
@@ -217,61 +217,71 @@ public class TickerController {
                 double cha = bollNow.getStand() - bollPre.getStand();
                 double shang = cha / bollPrs.getStand();
                 //如果当最近两个标准差的差值比上个标准差大百分之40说明有大行情来了
-//                if (shang > 0.4) {
-//                    //当前的价格在上轨，追多
-//                    double mid = bollNow.getMid();
-//                    if (lastPrice > mid) {
-//                        //为了防止重复下单
-//                        if (kd == 0) {
-//                            //当前并没有持仓
-//                            if(order.getAmount() == 0){
-//                                //下单---->开盘价 ——等于收盘价
-//                                //拿出账户的六分之一进行开单
-//                                Double duoD  = new BigDecimal(account).divide(new BigDecimal(6), 2, BigDecimal.ROUND_HALF_DOWN).doubleValue();
-//                                order.setAmount(duoD);
-//                                order.setDirection("duo");
-//                                order.setPrice(entity.getSpj());
-//                                //计算止盈止损的值
-//                                //一旦触发会多少赚多少亏多少
-////                                Order order = getTrad(tradeAPIService, accountAPIService, marketDataAPIService,"buy");
-////                                // 测试文本邮件发送（无附件）
-//                                String content = "我在=" + time + "的59分59秒=开多了" + "开多价格是=" + entity.getSpj();
-//                                System.out.println("大行情开始了" + content);
-//                                total = total + 1;
-//                                cs = cs+1;
-//                                kd = 1;
-//                            }
-//
-//                        }
-//
-//                    }
-//                    //当前的价格在下轨，追空
-//                    if (lastPrice < mid) {
-//                        //为了防止重复下单
-//                        if (kk == 0) {
-//                            //当前并没有持仓
-//                            if(order.getAmount() == 0){
-//                                //下单---->开盘价 ——等于收盘价
-//                                //拿出账户的六分之一进行开单
-////                                Double kongD  = new BigDecimal(account).setScale(6, BigDecimal.ROUND_HALF_DOWN).doubleValue();
-//                                Double kongD  = new BigDecimal(account).divide(new BigDecimal(6), 2, BigDecimal.ROUND_HALF_DOWN).doubleValue();
-//                                order.setAmount(kongD);
-//                                order.setDirection("kong");
-//                                order.setPrice(entity.getSpj());
-////                                // 测试文本邮件发送（无附件）
-//                                String content = "我在=" + time + "的59分59秒=开空了" + "开空价格是=" + entity.getSpj();
-//                                System.out.println("大行情开始了" + content);
-////                                Order order = getTrad(tradeAPIService, accountAPIService, marketDataAPIService,"sell");
-//                                //开仓设置止盈止损成功
-//                                total = total + 1;
-//                                kc = kc+1;
-//                                kk = 1;
-//                            }
-//                        }
-//                    }
-//                }
+                if (shang > 0.4) {
+                    //当前的价格在上轨，追多
+                    double mid = bollNow.getMid();
+                    if (lastPrice > mid) {
+                        //为了防止重复下单
+                        if (kd == 0) {
+                            BigDecimal data1 = new BigDecimal(entity.getVol());
+                            BigDecimal data2 = new BigDecimal(entity.getMaxVol());
+                            int dx = compareDx(data1,data2);
+                            if(dx == 0){
+                            //当前并没有持仓
+                            if(order.getAmount() == 0){
+                                //下单---->开盘价 ——等于收盘价
+                                //拿出账户的六分之一进行开单
+                                Double duoD  = new BigDecimal(account).divide(new BigDecimal(6), 2, BigDecimal.ROUND_HALF_DOWN).doubleValue();
+                                order.setAmount(duoD);
+                                order.setDirection("duo");
+                                order.setPrice(entity.getSpj());
+                                //计算止盈止损的值
+                                //一旦触发会多少赚多少亏多少
+//                                Order order = getTrad(tradeAPIService, accountAPIService, marketDataAPIService,"buy");
+//                                // 测试文本邮件发送（无附件）
+                                String content = "我在=" + time + "的59分59秒=开多了" + "开多价格是=" + entity.getSpj();
+                                System.out.println("大行情开始了" + content);
+                                System.out.println("该小时交易量=" + entity.getVol()+" 两天内最大交易量="+entity.getMaxVol());
+                                total = total + 1;
+                                cs = cs+1;
+                                kd = 1;
+                            }
+                        }
+                    }
+                    //当前的价格在下轨，追空
+                    if (lastPrice < mid) {
+                        //为了防止重复下单
+                        if (kk == 0) {
+                            BigDecimal data1 = new BigDecimal(entity.getVol());
+                            BigDecimal data2 = new BigDecimal(entity.getMaxVol());
+                            int dx = compareDx(data1,data2);
+                            if(dx == 0){
+                                //当前并没有持仓
+                                if (order.getAmount() == 0) {
+                                    //下单---->开盘价 ——等于收盘价
+                                    //拿出账户的六分之一进行开单
+//                                Double kongD  = new BigDecimal(account).setScale(6, BigDecimal.ROUND_HALF_DOWN).doubleValue();
+                                    Double kongD = new BigDecimal(account).divide(new BigDecimal(6), 2, BigDecimal.ROUND_HALF_DOWN).doubleValue();
+                                    order.setAmount(kongD);
+                                    order.setDirection("kong");
+                                    order.setPrice(entity.getSpj());
+//                                // 测试文本邮件发送（无附件）
+                                    String content = "我在=" + time + "的59分59秒=开空了" + "开空价格是=" + entity.getSpj();
+                                    System.out.println("大行情开始了" + content);
+                                    System.out.println("该小时交易量=" + entity.getVol() + " 两天内最大交易量=" + entity.getMaxVol());
+//                                Order order = getTrad(tradeAPIService, accountAPIService, marketDataAPIService,"sell");
+                                    //开仓设置止盈止损成功
+                                    total = total + 1;
+                                    kc = kc + 1;
+                                    kk = 1;
+                                }
+                            }
+                          }
+                        }
+                    }
+                }
                 //通过KDJ下单
-                getOrderByKdj(time, entity, kdjNow, kdjPre,bollNow,macdTarget,macdPre);
+//                getOrderByKdj(time, entity, kdjNow, kdjPre,bollNow,macdTarget,macdPre);
 
 
             }
@@ -280,7 +290,7 @@ public class TickerController {
                 kd = 0;
                 kk = 0;
                 //通过KDJ下单
-                getOrderByKdj(time, entity,  kdjNow, kdjPre, bollNow,macdTarget,macdPre);
+//                getOrderByKdj(time, entity,  kdjNow, kdjPre, bollNow,macdTarget,macdPre);
             }
 
         }
@@ -290,6 +300,22 @@ public class TickerController {
 
         return "查询成功";
     }
+
+    private int compareDx(BigDecimal val1, BigDecimal val2) {
+
+            int result = 6;
+            if (val1.compareTo(val2) < 0) {
+                result = val1.compareTo(val2) ;
+            }
+            if (val1.compareTo(val2) == 0) {
+                result = val1.compareTo(val2)  ;
+            }
+            if (val1.compareTo(val2) > 0) {
+                result = val1.compareTo(val2);
+            }
+            return result;
+    }
+
 
     private void getOrderByKdj(String time, TickerEntity entity, KdjTarget target,KdjTarget targetPre, BollTarget bollNow,MacdTarget macdTarget,MacdTarget macdPre) {
         //如果kdj的K>D金叉，K<D死叉，金叉D要小于26，死叉D要大于65，一定要距离成叉的一格之内
@@ -316,7 +342,7 @@ public class TickerController {
             }
         }*/
         //当前小时死叉，上个小时金叉
-        if(target.getK()<target.getD()&&target.getD()>65){
+      /*  if(target.getK()<target.getD()&&target.getD()>69){
             if(targetPre.getD()<targetPre.getK()){
                 //批量撤销止盈单子
                 //当前并没有持仓
@@ -353,11 +379,10 @@ public class TickerController {
                             //开仓设置止盈止损成功
                             total = total + 1;
                         }
-
                     }
                 }
             }
-        }
+        }*/
     }
 
 }
