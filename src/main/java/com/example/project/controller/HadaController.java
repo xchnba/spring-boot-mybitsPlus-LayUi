@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
-public class TickerController {
+public class HadaController {
     @Autowired
     TickerEntityMapper entityMapper;
     //止赢次数
@@ -38,14 +38,14 @@ public class TickerController {
     //初始单子为
     public static Order order = new Order();
 
-    @RequestMapping("/queryTicker")
+    @RequestMapping("/hadaTicker")
     @ResponseBody
     public String queryshares() {
         //初始化订单的持仓量和持仓方向
         order.setAmount(0d);
         order.setDirection("wu");
         order.setPrice(0d);
-        List<TickerEntity> tickers = entityMapper.selectByDate("2022-08-15 09:54:56", "2022-09-31 23:54:56");
+        List<TickerEntity> tickers = entityMapper.selectByDate("2022-03-15 09:54:56", "2022-04-31 23:54:56");
         tickers = TargetUtils.zhuanHuanMaxVol(tickers);
         //获取K线,第一条是最新的倒叙排序，limit最大300
 //                List<TickerEntity> tickers = TargetUtils.getTickers(marketDataAPIService,"ETH-USDT-SWAP","1H","300");
@@ -123,8 +123,8 @@ public class TickerController {
                     //计算止盈止损的点位
                     Double price = order.getPrice();
                     //止盈止损点
-                    Double zyd = 1.004;
-                    Double zsd = 0.989;
+                    Double zyd = 1.003;
+                    Double zsd = 0.992;
                     //杠杆倍数
                     Double bs = 75.0;
                     //手续来回费率
@@ -141,36 +141,37 @@ public class TickerController {
                     Double zyCount = new BigDecimal(order.getAmount()).multiply(new BigDecimal(bs)).multiply(new BigDecimal(zyl)).setScale(2, BigDecimal.ROUND_HALF_DOWN).doubleValue();
                    //止损点数量
                     Double zsCount = new BigDecimal(order.getAmount()).multiply(new BigDecimal(bs)).multiply(new BigDecimal(zsl)).setScale(2, BigDecimal.ROUND_HALF_DOWN).doubleValue();
-                    //先判断是否止损，再判断止盈
-                    //如果止损的价格比最低价格大，说明打到了止损
-                    if(zdj<zsb){
-                       account = account - zsCount;
-                       //状态初始化
-                       order.setAmount(0d);
-                       order.setDirection("wu");
-                       order.setPrice(0d);
-                       zsc = zsc + 1;
-                       System.out.println("多单止损了"+zsb+"当前账户="+account+"止损时间"+time);
+                    //先判断是否止盈，再判断止损
+                    //如果最高价格>止盈价格，说明打到了止盈
+                    if(zgj>zyb){
+                        account = account + zyCount;
+                        //状态初始化
+                        order.setAmount(0d);
+                        order.setDirection("wu");
+                        order.setPrice(0d);
+                        zyc = zyc + 1;
+                        System.out.println("我的多单止赢了"+zyb+"当前账户="+account+"最高价="+zgj+"止盈时间"+time);
                     }else {
-                        //如果最高价格>止盈价格，说明打到了止盈
-                        if(zgj>zyb){
-                            account = account + zyCount;
+                        //如果止损的价格比最低价格大，说明打到了止损
+                        if(zdj<zsb){
+                            account = account - zsCount;
                             //状态初始化
                             order.setAmount(0d);
                             order.setDirection("wu");
                             order.setPrice(0d);
-                            zyc = zyc + 1;
-                            System.out.println("我的多单止赢了"+zyb+"当前账户="+account+"最高价="+zgj+"止盈时间"+time);
+                            zsc = zsc + 1;
+                            System.out.println("多单止损了"+zsb+"当前账户="+account+"止损时间"+time);
                         }
                     }
+
                 }
                 //如果订单方向为空
                 if(order.getDirection().equals("kong")){
                     //计算止盈止损的点位
                     Double price = order.getPrice();
                     //止盈止损点
-                    Double zyd = 0.996;
-                    Double zsd = 1.011;
+                    Double zyd = 0.997;
+                    Double zsd = 1.008;
                     //杠杆倍数
                     Double bs = 75.0;
                     //手续来回费率
@@ -189,27 +190,28 @@ public class TickerController {
                     //止损点数量
                     Double zsCount = new BigDecimal(order.getAmount()).multiply(new BigDecimal(bs)).multiply(new BigDecimal(zsl)).setScale(2, BigDecimal.ROUND_HALF_DOWN).doubleValue();
                     //先判断是否止损，再判断止
-                    //如果最高价大于止损价格，说明打到了止损
-                    if(zgj>zsb){
-                        account = account - zsCount;
+                    //如果最最低价<止盈价格，说明打到了止盈
+                    if(zdj<zyb){
+                        account = account + zyCount;
                         //状态初始化
                         order.setAmount(0d);
                         order.setDirection("wu");
                         order.setPrice(0d);
-                        zsc = zsc + 1;
-                        System.out.println("空单止损了"+zsb+"当前账户="+account+"止损时间="+time);
+                        zyc = zyc + 1;
+                        System.out.println("我的空单止赢了"+zyb+"当前账户="+account+"止盈时间="+time);
                     }else {
-                        //如果最最低价<止盈价格，说明打到了止盈
-                        if(zdj<zyb){
-                            account = account + zyCount;
+                        //如果最高价大于止损价格，说明打到了止损
+                        if(zgj>zsb){
+                            account = account - zsCount;
                             //状态初始化
                             order.setAmount(0d);
                             order.setDirection("wu");
                             order.setPrice(0d);
-                            zyc = zyc + 1;
-                            System.out.println("我的空单止赢了"+zyb+"当前账户="+account+"止盈时间="+time);
+                            zsc = zsc + 1;
+                            System.out.println("空单止损了"+zsb+"当前账户="+account+"止损时间="+time);
                         }
                     }
+
                 }
             }
             //标准差在递增说明口子在不断变大
@@ -231,7 +233,8 @@ public class TickerController {
                             if(order.getAmount() == 0){
                                 //下单---->开盘价 ——等于收盘价
                                 //拿出账户的六分之一进行开单
-                                Double duoD  = new BigDecimal(account).divide(new BigDecimal(6), 2, BigDecimal.ROUND_HALF_DOWN).doubleValue();
+//                                Double duoD  = new BigDecimal(account).divide(new BigDecimal(6), 2, BigDecimal.ROUND_HALF_DOWN).doubleValue();
+                                Double duoD  = 166.67;
                                 order.setAmount(duoD);
                                 order.setDirection("duo");
                                 order.setPrice(entity.getSpj());
@@ -263,8 +266,8 @@ public class TickerController {
                                 if (order.getAmount() == 0) {
                                     //下单---->开盘价 ——等于收盘价
                                     //拿出账户的六分之一进行开单
-//                                Double kongD  = new BigDecimal(account).setScale(6, BigDecimal.ROUND_HALF_DOWN).doubleValue();
-                                    Double kongD = new BigDecimal(account).divide(new BigDecimal(6), 2, BigDecimal.ROUND_HALF_DOWN).doubleValue();
+//                                    Double kongD = new BigDecimal(account).divide(new BigDecimal(6), 2, BigDecimal.ROUND_HALF_DOWN).doubleValue();
+                                    Double kongD = 166.67;
                                     order.setAmount(kongD);
                                     order.setDirection("kong");
                                     order.setPrice(entity.getSpj());
