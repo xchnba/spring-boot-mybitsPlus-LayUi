@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.project.dao.VocabularyMapper">
+  <resultMap id="BaseResultMap" type="com.example.project.entity.Vocabulary">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="danci" jdbcType="VARCHAR" property="danci" />
+    <result column="hanyi" jdbcType="VARCHAR" property="hanyi" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="ext1" jdbcType="VARCHAR" property="ext1" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="renshi" jdbcType="INTEGER" property="renshi" />
+    <result column="changdu" jdbcType="INTEGER" property="changdu" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from vocabulary
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.example.project.entity.Vocabulary">
+    insert into vocabulary (id, danci, hanyi, 
+      type, ext1, status, 
+      renshi, changdu)
+    values (#{id,jdbcType=VARCHAR}, #{danci,jdbcType=VARCHAR}, #{hanyi,jdbcType=VARCHAR}, 
+      #{type,jdbcType=VARCHAR}, #{ext1,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
+      #{renshi,jdbcType=INTEGER}, #{changdu,jdbcType=INTEGER})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.example.project.entity.Vocabulary">
+    update vocabulary
+    set danci = #{danci,jdbcType=VARCHAR},
+      hanyi = #{hanyi,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR},
+      ext1 = #{ext1,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      renshi = #{renshi,jdbcType=INTEGER},
+      changdu = #{changdu,jdbcType=INTEGER}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select id, danci, hanyi, type, ext1, status, renshi, changdu
+    from vocabulary
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, danci, hanyi, type, ext1, status, renshi, changdu
+    from vocabulary
+  </select>
+
+  <select id="selectByChangDu" resultMap="BaseResultMap">
+    select id, danci, hanyi, type, ext1, status, renshi, changdu
+    from vocabulary order by changdu asc
+  </select>
+
+</mapper>

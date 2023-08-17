@@ -45,7 +45,7 @@ public class HadaController {
         order.setAmount(0d);
         order.setDirection("wu");
         order.setPrice(0d);
-        List<TickerEntity> tickers = entityMapper.selectByDate("2022-03-15 09:54:56", "2022-04-31 23:54:56");
+        List<TickerEntity> tickers = entityMapper.selectByDate("2022-10-15 09:54:56", "2022-11-31 23:54:56");
         tickers = TargetUtils.zhuanHuanMaxVol(tickers);
         //获取K线,第一条是最新的倒叙排序，limit最大300
 //                List<TickerEntity> tickers = TargetUtils.getTickers(marketDataAPIService,"ETH-USDT-SWAP","1H","300");
@@ -126,7 +126,7 @@ public class HadaController {
                     Double zyd = 1.003;
                     Double zsd = 0.992;
                     //杠杆倍数
-                    Double bs = 75.0;
+                    Double bs = 100.0;
                     //手续来回费率
                     Double fl = 0.001;
                     //止盈百分比
@@ -173,7 +173,7 @@ public class HadaController {
                     Double zyd = 0.997;
                     Double zsd = 1.008;
                     //杠杆倍数
-                    Double bs = 75.0;
+                    Double bs = 100.0;
                     //手续来回费率
                     Double fl = 0.001;
                     //止盈百分比
@@ -219,7 +219,7 @@ public class HadaController {
                 double cha = bollNow.getStand() - bollPre.getStand();
                 double shang = cha / bollPrs.getStand();
                 //如果当最近两个标准差的差值比上个标准差大百分之40说明有大行情来了
-                if (shang > 0.1) {
+                if (shang > 0.06) {
                     //当前的价格在上轨，追多
                     double mid = bollNow.getMid();
                     if (lastPrice > mid) {
@@ -233,8 +233,8 @@ public class HadaController {
                             if(order.getAmount() == 0){
                                 //下单---->开盘价 ——等于收盘价
                                 //拿出账户的六分之一进行开单
-//                                Double duoD  = new BigDecimal(account).divide(new BigDecimal(6), 2, BigDecimal.ROUND_HALF_DOWN).doubleValue();
-                                Double duoD  = 166.67;
+                                Double duoD  = new BigDecimal(account).divide(new BigDecimal(6), 2, BigDecimal.ROUND_HALF_DOWN).doubleValue();
+//                                Double duoD  = 166.67;
                                 order.setAmount(duoD);
                                 order.setDirection("duo");
                                 order.setPrice(entity.getSpj());
@@ -266,8 +266,8 @@ public class HadaController {
                                 if (order.getAmount() == 0) {
                                     //下单---->开盘价 ——等于收盘价
                                     //拿出账户的六分之一进行开单
-//                                    Double kongD = new BigDecimal(account).divide(new BigDecimal(6), 2, BigDecimal.ROUND_HALF_DOWN).doubleValue();
-                                    Double kongD = 166.67;
+                                    Double kongD = new BigDecimal(account).divide(new BigDecimal(6), 2, BigDecimal.ROUND_HALF_DOWN).doubleValue();
+//                                    Double kongD = 166.67;
                                     order.setAmount(kongD);
                                     order.setDirection("kong");
                                     order.setPrice(entity.getSpj());
