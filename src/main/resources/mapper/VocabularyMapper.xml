@@ -10,6 +10,10 @@
     <result column="status" jdbcType="INTEGER" property="status" />
     <result column="renshi" jdbcType="INTEGER" property="renshi" />
     <result column="changdu" jdbcType="INTEGER" property="changdu" />
+    <result column="uses" jdbcType="INTEGER" property="uses" />
+    <result column="test" jdbcType="INTEGER" property="test" />
+    <result column="star" jdbcType="INTEGER" property="star" />
+    <result column="sort" jdbcType="INTEGER" property="sort" />
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from vocabulary
@@ -40,13 +44,46 @@
     where id = #{id,jdbcType=VARCHAR}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
-    select id, danci, hanyi, type, ext1, status, renshi, changdu
+    select id, danci, hanyi, type, ext1, status, renshi, changdu ,uses,test,star,sort
     from vocabulary
   </select>
 
   <select id="selectByChangDu" resultMap="BaseResultMap">
-    select id, danci, hanyi, type, ext1, status, renshi, changdu
+    select id, danci, hanyi, type, ext1, status, renshi, changdu,use,test,star,sort
     from vocabulary order by changdu asc
+  </select>
+
+  <select id="getByDanci" resultMap="BaseResultMap">
+    select id, danci, hanyi, type, ext1, status, renshi, changdu,uses,test,star,sort
+    from vocabulary  where danci = #{danci,jdbcType=VARCHAR}
+  </select>
+
+  <select id="getByDanciByParam" resultMap="BaseResultMap">
+    select id, danci, hanyi, type, ext1, status, renshi, changdu,uses,test,star,sort
+    from vocabulary t
+    <where>
+      <if test=" uses != null ">
+        and t.uses  = #{uses,jdbcType=INTEGER}
+      </if>
+      <if test="test != null ">
+        and t.test  = #{test,jdbcType=INTEGER}
+      </if>
+      <if test="star != null ">
+        and t.star  = #{star,jdbcType=INTEGER}
+      </if>
+      <if test="sort != null ">
+        and t.sort  = #{sort,jdbcType=INTEGER}
+      </if>
+    </where>
+
+    <if test=" dan != null and dan != ''">
+      order by t.danci asc
+    </if>
+
+    <if test=" dan == null or dan == ''">
+      order by changdu asc
+    </if>
+
   </select>
 
 </mapper>

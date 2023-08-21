@@ -24,6 +24,58 @@ public class Vocabulary implements Serializable {
     private Integer renshi;
     @TableField("changdu")
     private Integer changdu;
+    /**
+     *使用频率：1高频，2中高频，3中频，4中低频，5低频
+     */
+    @TableField("uses")
+    private Integer uses;
+    /**
+     * 考试词汇：1.英语四级词汇；2.六级；3.专4；4专8；5考研；6托福；7雅思；8gre词汇
+     */
+    @TableField("test")
+    private Integer test;
+    /**
+     * 星级词汇：1.基本词汇；2.核心词汇；3.常用词汇；4.扩展词汇；5.畅通词汇
+     */
+    @TableField("star")
+    private Integer star;
+    /**
+     * 分类：1.水果；2.蔬菜；3.花；4.哺乳动物；5.家畜家禽；6.爬行两栖；7.禽鸟；8.鱼类；9.壳类动物；10.昆虫；11.树
+     */
+    @TableField("sort")
+    private Integer sort;
+
+    public Integer getUses() {
+        return uses;
+    }
+
+    public void setUses(Integer uses) {
+        this.uses = uses;
+    }
+
+    public Integer getTest() {
+        return test;
+    }
+
+    public void setTest(Integer test) {
+        this.test = test;
+    }
+
+    public Integer getStar() {
+        return star;
+    }
+
+    public void setStar(Integer star) {
+        this.star = star;
+    }
+
+    public Integer getSort() {
+        return sort;
+    }
+
+    public void setSort(Integer sort) {
+        this.sort = sort;
+    }
 
     private static final long serialVersionUID = 1L;
 
