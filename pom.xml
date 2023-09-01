@@ -150,6 +150,12 @@
             <version>1.11.2</version>
         </dependency>
 
+        <!--hutool具包-->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>5.4.0</version>
+        </dependency>
 
     </dependencies>
 

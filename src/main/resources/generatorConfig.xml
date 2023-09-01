@@ -42,7 +42,7 @@
         <javaClientGenerator targetPackage="dao"
                              targetProject="D:\IdeaProjectSpace\spring_boot_mybitsPlus\src\main\java\com\example\project" type="XMLMAPPER" />
 
-        <table tableName="vocabulary" domainObjectName="Vocabulary"></table>
+        <table tableName="uunknowss" domainObjectName="UserUnknow"></table>
         <!-- 有些表的字段需要指定java类型 <table schema="" tableName=""> <columnOverride column=""
             javaType="" /> </table> -->
     </context>

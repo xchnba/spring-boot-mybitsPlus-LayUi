@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.project.dao.UserUnknowMapper">
+  <resultMap id="BaseResultMap" type="com.example.project.entity.UserUnknow">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="openId" jdbcType="VARCHAR" property="openid" />
+    <result column="danci" jdbcType="VARCHAR" property="danci" />
+    <result column="hanyi" jdbcType="VARCHAR" property="hanyi" />
+    <result column="des" jdbcType="VARCHAR" property="des" />
+    <result column="changdu" jdbcType="INTEGER" property="changdu" />
+    <result column="date" jdbcType="TIMESTAMP" property="date" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from uunknow
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.example.project.entity.UserUnknow">
+    insert into uunknow (id, openId, danci, 
+      hanyi, des, changdu, 
+      date)
+    values (#{id,jdbcType=VARCHAR}, #{openid,jdbcType=VARCHAR}, #{danci,jdbcType=VARCHAR}, 
+      #{hanyi,jdbcType=VARCHAR}, #{des,jdbcType=VARCHAR}, #{changdu,jdbcType=INTEGER}, 
+      #{date,jdbcType=TIMESTAMP})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.example.project.entity.UserUnknow">
+    update uunknow
+    set openId = #{openid,jdbcType=VARCHAR},
+      danci = #{danci,jdbcType=VARCHAR},
+      hanyi = #{hanyi,jdbcType=VARCHAR},
+      des = #{des,jdbcType=VARCHAR},
+      changdu = #{changdu,jdbcType=INTEGER},
+      date = #{date,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select id, openId, danci, hanyi, des, changdu, date
+    from uunknow
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, openId, danci, hanyi, des, changdu, date
+    from uunknow
+  </select>
+
+  <select id="getUnKnowDanciByParam" resultMap="BaseResultMap">
+    select id, openId, danci, hanyi, des, changdu, date
+    from uunknow
+    <if test=" dan != null and dan != ''">
+      order by t.danci asc
+    </if>
+
+    <if test=" chang != null and chang != ''">
+      order by changdu asc
+    </if>
+  </select>
+
+  <select id="getUserUnknowCount" parameterType="java.lang.String" resultType="java.lang.Integer">
+    SELECT count(*) from uunknow where openId = #{openId,jdbcType=VARCHAR}
+  </select>
+
+</mapper>
