@@ -13,5 +13,5 @@ public interface UserUnknowMapper extends BaseMapper<UserUnknow> {
 
     Integer getUserUnknowCount(@Param("openId") String openId);
 
-    List<UserUnknow> getUnKnowDanciByParam(@Param("dan") String dan,@Param("chang") String chang);
+    List<UserUnknow> getUnKnowDanciByParam(@Param("dan") String dan,@Param("chang") String chang,@Param("openId") String openId);
 }

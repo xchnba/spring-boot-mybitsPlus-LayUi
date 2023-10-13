@@ -4,8 +4,10 @@ import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.example.project.dao.DcMemoryEntityMapper;
 import com.example.project.dao.UserUnknowMapper;
 import com.example.project.dao.VocabularyMapper;
+import com.example.project.entity.DcMemoryEntity;
 import com.example.project.entity.UserUnknow;
 import com.example.project.entity.Vocabulary;
 import com.github.pagehelper.PageHelper;
@@ -28,6 +30,8 @@ public class EnglishController {
     VocabularyMapper mapper;
     @Autowired
     UserUnknowMapper unknowMapper;
+    @Autowired
+    DcMemoryEntityMapper dcMemoryMapper;
 
     @RequestMapping("/charuDanChi")
     @ResponseBody
@@ -188,6 +192,119 @@ public class EnglishController {
     }
 
     /**
+     * 获取huida
+     * @param
+     * @return
+     */
+    @RequestMapping("/getAnswer")
+    @ResponseBody
+    public String getAnswer(String mes) {
+        //信息
+//        mes="比特币是骗局吗？";
+        //微信小程序官方接口
+        long  t1 = System.currentTimeMillis();
+        String requestUrl = "http://8.222.184.55/wenda/answer";
+        //接口所需参数
+        HashMap<String, Object> requestUrlParam = new HashMap<>();
+        //danzi
+        requestUrlParam.put("mes", mes);
+        //发送post请求读取调用微信接口获取openid用户唯一标识
+        String result = HttpUtil.get(requestUrl, requestUrlParam);
+        long  t2 = System.currentTimeMillis();
+        long t3 = t2-t1;
+        System.out.println(t3);
+        return result;
+    }
+
+    /**
+     * 获取例句
+     * @param
+     * @return
+     */
+    @RequestMapping("/getDemo")
+    @ResponseBody
+    public String getDemo(String mes) {
+        String ase = mes;
+        //如果有值了就直接从库里面拿
+        Vocabulary vocabulary = mapper.getByDanci(ase);
+        if(vocabulary !=null){
+            if(StringUtils.isNotEmpty(vocabulary.getExt1())){
+                return vocabulary.getExt1();
+            }
+        }
+        //信息
+        mes="用单词"+mes+"造一个例句，并返回中文含义";
+        //微信小程序官方接口
+        String requestUrl = "http://8.222.184.55/wenda/answer";
+        //接口所需参数
+        HashMap<String, Object> requestUrlParam = new HashMap<>();
+        //danzi
+        requestUrlParam.put("mes", mes);
+        //发送post请求读取调用微信接口获取openid用户唯一标识
+        String result = HttpUtil.get(requestUrl, requestUrlParam);
+        //入库
+        if(vocabulary !=null){
+            try {
+                vocabulary.setExt1(result);
+                mapper.updateById(vocabulary);
+            } catch (Exception e) {
+                    System.out.println("更新例句出错了，可能是长度超了");
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 获取例句
+     * @param
+     * @return
+     */
+    @RequestMapping("/saveMemory")
+    @ResponseBody
+    public String saveMemory(String danci,String mens,String openId) {
+        try {
+                DcMemoryEntity dcMemory = dcMemoryMapper.getDcMemory(danci,openId);
+                if(dcMemory !=null ){
+                    dcMemory.setMens(mens);
+                    dcMemoryMapper.updateById(dcMemory);
+                }else {
+                    DcMemoryEntity dcMemory2 = new DcMemoryEntity();
+                    dcMemory2.setDanci(danci);
+                    dcMemory2.setOpenid(openId);
+                    dcMemory2.setMens(mens);
+                    dcMemoryMapper.insert(dcMemory2);
+                }
+            } catch (Exception e) {
+
+                System.out.println("更新例句出错了，可能是长度超了");
+            }
+
+        return "保存成功！";
+    }
+
+
+    /**
+     * 获取例句
+     * @param
+     * @return
+     */
+    @RequestMapping("/getMemory")
+    @ResponseBody
+    public String getMemory(String danci,String openId) {
+        String result ="";
+        try {
+            DcMemoryEntity dcMemory = dcMemoryMapper.getDcMemory(danci,openId);
+            if(dcMemory !=null ){
+                result = dcMemory.getMens();
+            }
+        } catch (Exception e) {
+            System.out.println("更新例句出错了，可能是长度超了");
+        }
+
+        return result;
+    }
+
+    /**
      * 保存用户不认识的单词
      * @param danci
      * @return
@@ -230,7 +347,7 @@ public class EnglishController {
         String dan = "";
         String chang = "hala";
         PageHelper.startPage(Integer.valueOf(_page), 1);
-        List<UserUnknow> list = unknowMapper.getUnKnowDanciByParam(dan,chang);
+        List<UserUnknow> list = unknowMapper.getUnKnowDanciByParam(dan,chang,_limit);
         PageInfo pageInfo = new PageInfo(list);
         System.out.println("页码：" + pageInfo.getPageNum());
         System.out.println("页大小：" + pageInfo.getPageSize());

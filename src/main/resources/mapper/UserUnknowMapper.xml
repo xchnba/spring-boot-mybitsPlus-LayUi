@@ -45,6 +45,7 @@
   <select id="getUnKnowDanciByParam" resultMap="BaseResultMap">
     select id, openId, danci, hanyi, des, changdu, date
     from uunknow
+    where openId = #{openId,jdbcType=VARCHAR}
     <if test=" dan != null and dan != ''">
       order by t.danci asc
     </if>
